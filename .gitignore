@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Logs
+*.log
+
+# Runtime uploads/exports (keep directory placeholders)
+uploads/*
+!uploads/.gitkeep
+exports/*
+!exports/.gitkeep

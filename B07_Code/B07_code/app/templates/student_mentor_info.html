@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/students.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="mentor-info-page">
+    <section class="student-hero">
+        <p class="student-eyebrow">My Mentor</p>
+        <h2>My Mentor Information</h2>
+        <p>Check your own student information, organization information, MCP group, and assigned mentor details.</p>
+    </section>
+
+    <section class="student-card">
+        <div class="student-summary-grid">
+            <div class="student-info-item">
+                <small>Student ID</small>
+                <strong>{{ info.student.student_id }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Name</small>
+                <strong>{{ info.student.name }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Status</small>
+                <span class="student-status">{{ info.student.status }}</span>
+            </div>
+            <div class="student-info-item">
+                <small>Mentor</small>
+                <strong>{{ info.mentor.name if info.mentor else "N/A" }}</strong>
+            </div>
+        </div>
+    </section>
+
+    <div class="student-section-grid">
+        <section class="student-profile-card">
+            <h3>Organization Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Faculty</span>
+                    <span>{{ info.faculty.name if info.faculty else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Department</span>
+                    <span>{{ info.department.name if info.department else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Major</span>
+                    <span>{{ info.major.name if info.major else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-profile-card">
+            <h3>MCP Group Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Group ID</span>
+                    <span>{{ info.group.group_id if info.group else "Not assigned" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Academic Year</span>
+                    <span>{{ info.group.academic_year if info.group else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-profile-card">
+            <h3>Mentor Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Mentor Name</span>
+                    <span>{{ info.mentor.name if info.mentor else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Email</span>
+                    <span>{{ info.mentor.email if info.mentor else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Office</span>
+                    <span>{{ info.mentor.office if info.mentor else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="student-actions">
+        <a class="student-secondary-action" href="{{ url_for('student.student_home') }}">← Back to Student Home</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="record-form-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Interview Record</p>
+        <h2>{{ "Add" if mode == "add" else "Edit" }} Interview Record</h2>
+        <p>Create or update consultation information, interview summary, and follow-up actions.</p>
+    </section>
+
+    <div class="records-meta-grid">
+        <div class="records-meta-card">
+            <small>Student</small>
+            <strong>{{ info.student.student_id }} - {{ info.student.name }}</strong>
+        </div>
+    </div>
+
+    <section class="records-panel">
+        <form class="records-form" method="post">
+            {% if mode == "add" %}
+            <div class="records-form-grid">
+                <div class="records-form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" required>
+                </div>
+
+                <div class="records-form-group">
+                    <label>Time</label>
+                    <input type="time" name="time" required>
+                </div>
+            </div>
+            {% else %}
+            <div class="records-meta-grid">
+                <div class="records-meta-card">
+                    <small>Date</small>
+                    <strong>{{ record.interview_date }}</strong>
+                </div>
+                <div class="records-meta-card">
+                    <small>Time</small>
+                    <strong>{{ record.interview_time.strftime('%H:%M') }}</strong>
+                </div>
+            </div>
+            <br>
+            {% endif %}
+
+            <div class="records-form-group">
+                <label>Problem Statement</label>
+                <textarea name="problem_statement" rows="5" required>{{ record.problem_statement if record else "" }}</textarea>
+            </div>
+
+            <div class="records-form-group">
+                <label>Interview Summary</label>
+                <textarea name="interview_summary" rows="5" required>{{ record.interview_summary if record else "" }}</textarea>
+            </div>
+
+            <div class="records-form-group">
+                <label>Follow-up Action</label>
+                <textarea name="followup_action" rows="5" required>{{ record.followup_action if record else "" }}</textarea>
+            </div>
+
+            <div class="records-form-actions">
+                <button type="submit">Save Record</button>
+                <a class="records-back-link" href="{{ url_for('report.student_records', student_id=info.student.student_id) }}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

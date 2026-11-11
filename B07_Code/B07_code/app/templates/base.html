@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mentor Caring System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="page-{{ (request.endpoint or 'default')|replace('.', '-') }}">
+    <header class="app-header">
+        <div class="nav-wrap">
+            <a class="brand" href="{% if current_user.is_authenticated %}
+                {% if current_user.role == 'admin' %}{{ url_for('admin.admin_home') }}
+                {% elif current_user.role == 'faculty_consultant' %}{{ url_for('consultant.faculty_home') }}
+                {% elif current_user.role == 'mentor' %}{{ url_for('mentor.mentor_home') }}
+                {% elif current_user.role == 'student' %}{{ url_for('student.student_home') }}
+                {% elif current_user.role == 'coordinator' %}{{ url_for('coordinator.coordinator_home') }}
+                {% elif current_user.role == 'faculty_member' %}{{ url_for('auth.faculty_member_home') }}
+                {% else %}{{ url_for('auth.index') }}{% endif %}
+            {% else %}{{ url_for('auth.login') }}{% endif %}">
+                <span class="brand-icon">M</span>
+                <span>
+                    <strong>Mentor Caring System</strong>
+                    <small>Student support dashboard</small>
+                </span>
+            </a>
+
+            <nav class="top-nav">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == "admin" %}
+                        <a href="{{ url_for('admin.admin_home') }}">Dashboard</a>
+                        <a href="{{ url_for('admin.organization') }}">Organization</a>
+                        <a href="{{ url_for('admin.admin_consultants') }}">Consultants</a>
+                    {% elif current_user.role == "faculty_consultant" %}
+                        <a href="{{ url_for('consultant.faculty_home') }}">Dashboard</a>
+                        <a href="{{ url_for('consultant.faculty_groups') }}">Groups</a>
+                        <a href="{{ url_for('consultant.search_student') }}">Students</a>
+                        <a href="{{ url_for('report.record_search') }}">Records</a>
+                    {% elif current_user.role == "mentor" %}
+                        <a href="{{ url_for('mentor.mentor_home') }}">Dashboard</a>
+                        <a href="{{ url_for('consultant.search_student') }}">Students</a>
+                        <a href="{{ url_for('report.record_search') }}">Records</a>
+                        <a href="{{ url_for('appointment.mentor_appointments') }}">Appointments</a>
+                    {% elif current_user.role == "student" %}
+                        <a href="{{ url_for('student.student_home') }}">Dashboard</a>
+                        <a href="{{ url_for('student.student_mentor_info') }}">Mentor Info</a>
+                        <a href="{{ url_for('appointment.student_appointments') }}">Appointments</a>
+                    {% elif current_user.role == "coordinator" %}
+                        <a href="{{ url_for('coordinator.coordinator_home') }}">Dashboard</a>
+                        <a href="{{ url_for('consultant.search_student') }}">Students</a>
+                        <a href="{{ url_for('report.record_search') }}">Records</a>
+                    {% elif current_user.role == "faculty_member" %}
+                        <a href="{{ url_for('auth.faculty_member_home') }}">Dashboard</a>
+                        <a href="{{ url_for('report.log_list') }}">Logs</a>
+                        <a href="{{ url_for('message.message_home') }}">Messages</a>
+                    {% endif %}
+
+                    {% if current_user.role != "faculty_member" %}
+                        <a href="{{ url_for('message.message_home') }}">Messages</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.change_password') }}">Password</a>
+                    <a class="logout-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                {% else %}
+                    <a class="logout-link" href="{{ url_for('auth.login') }}">Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="layout">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <section class="flash-panel">
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="page-card">
+            {% block content %}
+            {% endblock %}
+        </section>
+    </main>
+</body>
+</html>

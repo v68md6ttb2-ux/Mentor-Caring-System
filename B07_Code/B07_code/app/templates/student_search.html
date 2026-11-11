@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/students.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="students-page">
+    <section class="student-hero">
+        <p class="student-eyebrow">Student Information</p>
+        <h2>Search Student Information</h2>
+        <p>Enter a student ID to quickly open the student profile, organization information, mentor information, and related records.</p>
+    </section>
+
+    <section class="student-card">
+        <h3>Find a student</h3>
+
+        <form class="student-search-form" method="post">
+            <div class="student-search-row">
+                <div>
+                    <label>Student ID</label>
+                    <input
+                        type="text"
+                        name="student_id"
+                        value="{{ student_id }}"
+                        placeholder="e.g. 233000001"
+                        required
+                    >
+                </div>
+
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </section>
+
+    <div class="student-actions">
+        {% if current_user.role == "mentor" %}
+            <a class="student-secondary-action" href="{{ url_for('mentor.mentor_home') }}">← Back to Mentor Home</a>
+        {% elif current_user.role == "coordinator" %}
+            <a class="student-secondary-action" href="{{ url_for('coordinator.coordinator_home') }}">← Back to Coordinator Home</a>
+        {% elif current_user.role == "faculty_consultant" %}
+            <a class="student-secondary-action" href="{{ url_for('consultant.faculty_home') }}">← Back to Faculty Consultant Home</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-coordinator">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Coordinator Dashboard</p>
+        <h2>Coordinator Home</h2>
+        <p>Coordinate student support, communicate with users, forward cases, and review records or activity logs.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">People search</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('consultant.search_student') }}">
+            <span class="dashboard-icon">🔎</span>
+            <span>
+                <strong>Search Student Info</strong>
+                <small>Find student profiles, group details, and support information.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.search_mentor') }}">
+            <span class="dashboard-icon">👥</span>
+            <span>
+                <strong>Search Mentor Info</strong>
+                <small>Look up mentor profiles and related support responsibilities.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Messages and cases</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('message.message_home') }}">
+            <span class="dashboard-icon">💬</span>
+            <span>
+                <strong>Messages</strong>
+                <small>View received and sent internal messages.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.send_message_page') }}">
+            <span class="dashboard-icon">✉</span>
+            <span>
+                <strong>Send Message</strong>
+                <small>Contact students, mentors, or faculty consultants.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('coordinator.forward_case_to_consultant') }}">
+            <span class="dashboard-icon">📤</span>
+            <span>
+                <strong>Forward Case to Consultant</strong>
+                <small>Escalate cases to a faculty consultant for further support.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Records and account</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('report.record_search') }}">
+            <span class="dashboard-icon">📄</span>
+            <span>
+                <strong>Search Records</strong>
+                <small>Search interview records and related support notes.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.export_records_page') }}">
+            <span class="dashboard-icon">⬇</span>
+            <span>
+                <strong>Export Records</strong>
+                <small>Generate Word files from interview records.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.word_files') }}">
+            <span class="dashboard-icon">🗂</span>
+            <span>
+                <strong>Generated Word Files</strong>
+                <small>Download previously generated export files.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.log_list') }}">
+            <span class="dashboard-icon">🕘</span>
+            <span>
+                <strong>Log Activities</strong>
+                <small>Review student access and system activity logs.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your account password.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the current account.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

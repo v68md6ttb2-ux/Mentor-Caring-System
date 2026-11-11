@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="log-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Activity Logs</p>
+        <h2>Student Log Activities</h2>
+        <p>Search and review a student's activity log information by Student ID.</p>
+    </section>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Search Student Logs</h3>
+                <p>Enter a student ID to filter activity logs for checklist testing.</p>
+            </div>
+        </div>
+
+        <form class="records-form" method="get">
+            <div class="log-form-row">
+                <div class="records-form-group">
+                    <label>Student ID</label>
+                    <input type="text" name="student_id" value="{{ student_id_filter or '' }}" placeholder="2330000010">
+                </div>
+                <button type="submit">Search Logs</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Activity Log List</h3>
+                {% if student_id_filter %}
+                    <p>Showing results for Student ID: <strong>{{ student_id_filter }}</strong></p>
+                {% else %}
+                    <p>Showing recent access and function usage records.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if logs %}
+        <div class="records-table-wrap">
+            <table class="records-table">
+                <tr>
+                    <th>Log ID</th>
+                    <th>Student</th>
+                    <th>Login</th>
+                    <th>Logout</th>
+                    <th>Function Access</th>
+                </tr>
+
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.log_id }}</td>
+                    <td>
+                        {% if log.student %}
+                            {{ log.student.student_id }} - {{ log.student.name }}
+                        {% else %}
+                            Student DB ID: {{ log.student_id }}
+                        {% endif %}
+                    </td>
+                    <td>{{ log.login_time }}</td>
+                    <td>{{ log.logout_time }}</td>
+                    <td>{{ log.function_access }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="records-empty">
+            {% if student_id_filter %}
+                No log activities found for Student ID {{ student_id_filter }}.
+            {% else %}
+                No log activities found.
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Add Demo Log</h3>
+                <p>If no log exists yet, create one for testing and then search the same Student ID again.</p>
+            </div>
+        </div>
+
+        <form class="records-form" method="post">
+            <div class="log-form-row">
+                <div class="records-form-group">
+                    <label>Student ID</label>
+                    <input type="text" name="student_id" placeholder="2330000010" required>
+                </div>
+
+                <div class="records-form-group">
+                    <label>Function Access</label>
+                    <input type="text" name="function_access" value="View Interview Records" required>
+                </div>
+
+                <button type="submit">Add Demo Log</button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

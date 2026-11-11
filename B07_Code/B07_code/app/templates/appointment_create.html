@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/appointments.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="appointment-create-page">
+    <section class="appointment-hero">
+        <p class="appointment-eyebrow">Create Appointment</p>
+        <h2>Create Appointment</h2>
+        <p>Create an appointment request for a student and provide any number of 30-minute interview time slots.</p>
+    </section>
+
+    <section class="appointment-create-card">
+        <form class="appointment-create-form" method="post" id="appointment-create-form">
+            <div class="appointment-form-grid">
+                <div class="appointment-form-group full-width">
+                    <label>Student</label>
+                    <select name="student_id" required>
+                        {% for student in students %}
+                            <option value="{{ student.id }}">
+                                {{ student.student_id }} - {{ student.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="appointment-form-group full-width">
+                    <label>Content</label>
+                    <textarea name="content" rows="4">Appointment request</textarea>
+                </div>
+
+                <div class="appointment-form-group">
+                    <label>Date</label>
+                    <input type="date" id="slot-date" required>
+                </div>
+
+                <div class="appointment-form-group">
+                    <label>Start Time</label>
+                    <select id="slot-time" required>
+                        {% for hour in range(0, 24) %}
+                            {% for minute in [0, 30] %}
+                                <option value="{{ '%02d:%02d'|format(hour, minute) }}">
+                                    {{ '%02d:%02d'|format(hour, minute) }}
+                                </option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="appointment-form-group slot-add-group">
+                    <label>&nbsp;</label>
+                    <button type="button" class="appointment-secondary-action" id="add-slot-button">Add Slot</button>
+                </div>
+
+                <div class="appointment-form-group full-width">
+                    <label>Selected Available Slots</label>
+                    <div class="selected-slot-list" id="selected-slot-list">
+                        <p class="appointment-muted" id="empty-slot-message">No slots added yet.</p>
+                    </div>
+                    <div id="slot-hidden-inputs"></div>
+                </div>
+            </div>
+
+            <p class="appointment-help">
+                Select a date and a start time, then click Add Slot. Each slot lasts 30 minutes.
+                You can add as many slots as needed, but duplicate slots are not allowed.
+            </p>
+            <p class="appointment-form-error" id="slot-error" aria-live="polite"></p>
+
+            <div class="appointment-form-actions">
+                <button type="submit">Create Appointment</button>
+                <a class="appointment-back-link" href="{{ url_for('appointment.mentor_appointments') }}">← Back</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+<script>
+(function () {
+    const form = document.getElementById("appointment-create-form");
+    const dateInput = document.getElementById("slot-date");
+    const timeSelect = document.getElementById("slot-time");
+    const addButton = document.getElementById("add-slot-button");
+    const selectedSlotList = document.getElementById("selected-slot-list");
+    const hiddenInputs = document.getElementById("slot-hidden-inputs");
+    const emptyMessage = document.getElementById("empty-slot-message");
+    const errorMessage = document.getElementById("slot-error");
+    const selectedSlots = new Set();
+
+    function pad(number) {
+        return String(number).padStart(2, "0");
+    }
+
+    function formatDate(date) {
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function formatTime(date) {
+        return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function getSlotDisplay(slotValue) {
+        const start = new Date(slotValue.replace(" ", "T") + ":00");
+        const end = new Date(start.getTime() + 30 * 60 * 1000);
+        return `${formatDate(start)} ${formatTime(start)} - ${formatDate(end)} ${formatTime(end)}`;
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+    }
+
+    function clearError() {
+        errorMessage.textContent = "";
+    }
+
+    function renderSlots() {
+        selectedSlotList.innerHTML = "";
+        hiddenInputs.innerHTML = "";
+
+        if (selectedSlots.size === 0) {
+            selectedSlotList.appendChild(emptyMessage);
+            return;
+        }
+
+        Array.from(selectedSlots).forEach(function (slotValue) {
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "slots";
+            hiddenInput.value = slotValue;
+            hiddenInputs.appendChild(hiddenInput);
+
+            const item = document.createElement("div");
+            item.className = "selected-slot-item";
+
+            const text = document.createElement("span");
+            text.textContent = getSlotDisplay(slotValue);
+
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.className = "selected-slot-remove";
+            removeButton.dataset.slot = slotValue;
+            removeButton.textContent = "Remove";
+
+            item.appendChild(text);
+            item.appendChild(removeButton);
+            selectedSlotList.appendChild(item);
+        });
+    }
+
+    addButton.addEventListener("click", function () {
+        const dateValue = dateInput.value;
+        const timeValue = timeSelect.value;
+
+        if (!dateValue || !timeValue) {
+            showError("Please select both date and start time.");
+            return;
+        }
+
+        const slotValue = `${dateValue} ${timeValue}`;
+        if (selectedSlots.has(slotValue)) {
+            showError("This time slot has already been added.");
+            return;
+        }
+
+        selectedSlots.add(slotValue);
+        clearError();
+        renderSlots();
+    });
+
+    selectedSlotList.addEventListener("click", function (event) {
+        if (event.target.classList.contains("selected-slot-remove")) {
+            selectedSlots.delete(event.target.dataset.slot);
+            clearError();
+            renderSlots();
+        }
+    });
+
+    form.addEventListener("submit", function (event) {
+        if (selectedSlots.size === 0) {
+            event.preventDefault();
+            showError("Please add at least one available slot before creating the appointment.");
+        }
+    });
+})();
+</script>
+{% endblock %}

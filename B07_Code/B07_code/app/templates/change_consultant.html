@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Consultant Assignment</p>
+        <h2>Change Consultant Faculty</h2>
+        <p>Update the faculty assignment for a faculty consultant.</p>
+    </section>
+
+    <section class="org-card">
+        <form class="org-form" method="POST">
+            <div class="org-form-grid">
+                <div class="org-form-group is-full">
+                    <label>Consultant</label>
+                    <select name="consultant_id" required>
+                        <option value="">-- Select Consultant --</option>
+                        {% for c in consultants %}
+                        <option value="{{ c.id }}">{{ c.name }} ({{ c.email }}) — {{ c.faculty.name if c.faculty else 'Unassigned' }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="org-form-group is-full">
+                    <label>New Faculty</label>
+                    <select name="faculty_id">
+                        <option value="">-- No Faculty (Remove Assignment) --</option>
+                        {% for f in faculties %}
+                        <option value="{{ f.id }}">{{ f.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit">Change Faculty</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.admin_consultants') }}">← Back to Consultant List</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

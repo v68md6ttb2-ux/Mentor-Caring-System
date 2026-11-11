@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Mentor Caring System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-bg-page">
+<div class="auth-shell">
+    <div class="auth-intro">
+        <p class="eyebrow">Welcome back</p>
+        <h2>Sign in to Mentor Caring System</h2>
+        <p>
+            Manage student support, interview records, appointments and messages
+            in one clean dashboard.
+        </p>
+
+        <div class="feature-list">
+            <span>Student records</span>
+            <span>Mentor appointments</span>
+            <span>Internal messages</span>
+        </div>
+    </div>
+
+    <form method="post" class="auth-card">
+        <h3>Account Login</h3>
+
+        <label for="account">Account</label>
+        <input id="account" type="text" name="account" placeholder="Enter your account" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+</div>
+{% endblock %}

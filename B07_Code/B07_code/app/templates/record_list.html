@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="records-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Student Records</p>
+        <h2>Interview Records</h2>
+        <p>View and manage interview records for the selected student.</p>
+    </section>
+
+    <div class="records-meta-grid">
+        <div class="records-meta-card">
+            <small>Student</small>
+            <strong>{{ info.student.student_id }} - {{ info.student.name }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Group</small>
+            <strong>{{ info.group.group_id if info.group else "N/A" }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Mentor</small>
+            <strong>{{ info.mentor.name if info.mentor else "N/A" }}</strong>
+        </div>
+    </div>
+
+    <div class="records-toolbar">
+        <div class="records-toolbar-text">
+            <strong>Record list</strong>
+            <span>Browse interview history and open detailed records.</span>
+        </div>
+
+        {% if can_edit %}
+        <a class="records-primary-action" href="{{ url_for('report.add_record_page', student_id=info.student.student_id) }}">＋ Add New Record</a>
+        {% endif %}
+    </div>
+
+    <section class="records-panel">
+        {% if records %}
+        <div class="records-table-wrap">
+            <table class="records-table">
+                <tr>
+                    <th>Record ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Mentor</th>
+                    <th>Problem</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.record_id }}</td>
+                    <td>{{ record.interview_date }}</td>
+                    <td>{{ record.interview_time.strftime('%H:%M') }}</td>
+                    <td>{{ record.mentor.name }}</td>
+                    <td class="records-text-preview">{{ record.problem_statement }}</td>
+                    <td>
+                        <div class="records-actions">
+                            <a class="records-view-link" href="{{ url_for('report.record_detail', record_id=record.record_id) }}">View</a>
+                            {% if can_edit %}
+                            <a class="records-edit-link" href="{{ url_for('report.edit_record_page', record_id=record.record_id) }}">Edit</a>
+                            <form class="records-delete-form" method="post" action="{{ url_for('report.delete_record_page', record_id=record.record_id) }}">
+                                <button class="records-delete-button" type="submit" onclick="return confirm('Delete this record?');">Delete</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="records-empty">No interview records found.</div>
+        {% endif %}
+    </section>
+
+    <div>
+        <a class="records-back-link" href="{{ url_for('consultant.student_detail', student_id=info.student.student_id) }}">← Back to Student Detail</a>
+    </div>
+</div>
+{% endblock %}

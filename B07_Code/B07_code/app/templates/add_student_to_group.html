@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Group Membership</p>
+        <h2>Add Student to MCP Group</h2>
+        <p>Assign a student to an MCP group and review current student group assignments.</p>
+    </section>
+
+    <section class="org-card">
+        <form class="org-form" method="post">
+            <div class="org-form-grid">
+                <div class="org-form-group">
+                    <label>Student ID</label>
+                    <input type="text" name="student_id" placeholder="e.g. 233000001" required>
+                </div>
+
+                <div class="org-form-group">
+                    <label>MCP Group</label>
+                    <select name="group_id" required>
+                        {% for group in groups %}
+                            <option value="{{ group.id }}">
+                                {{ group.group_id }} - Mentor: {{ group.mentor.name if group.mentor else "N/A" }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit">Add Student to Group</button>
+                <a class="org-secondary-action" href="{{ url_for('consultant.faculty_groups') }}">← Back to Group List</a>
+                <a class="org-secondary-action" href="{{ url_for('consultant.faculty_home') }}">Back to Home</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="org-card">
+        <h3>Existing Students</h3>
+
+        {% if students %}
+        <div class="org-table-wrap">
+            <table class="org-table">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Current Group</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>
+                        {% if student.group %}
+                            <span class="org-status">{{ student.group.group_id }}</span>
+                        {% else %}
+                            <span class="org-status is-muted">Not assigned</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ student.status }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <p class="org-empty">No students found.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

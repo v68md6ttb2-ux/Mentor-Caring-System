@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/students.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="case-forward-page">
+    <section class="student-hero">
+        <p class="student-eyebrow">Case Forwarding</p>
+        <h2>Forward Case to Faculty Consultant</h2>
+        <p>Forward a student case to the faculty consultant for higher-level review and further support.</p>
+    </section>
+
+    <section class="student-card">
+        <h3>Case information</h3>
+
+        <form class="case-form" method="POST">
+            <div class="student-form-group">
+                <label>Student ID</label>
+                <input type="text" name="student_id" required pattern="\d{10}" title="10-digit student ID" placeholder="10-digit student ID">
+            </div>
+
+            <div class="student-form-group">
+                <label>Description</label>
+                <textarea name="description" rows="6" required placeholder="Describe the student case and the reason for forwarding..."></textarea>
+            </div>
+
+            <div class="student-actions">
+                <button type="submit">Forward Case</button>
+                <a class="student-secondary-action" href="{{ url_for('coordinator.coordinator_home') }}">← Back to Home</a>
+            </div>
+        </form>
+    </section>
+
+    <div class="case-help">
+        Use this form when the case should be reviewed by a faculty consultant.
+    </div>
+</div>
+{% endblock %}

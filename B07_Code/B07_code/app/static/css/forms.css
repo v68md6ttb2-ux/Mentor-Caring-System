@@ -1,0 +1,44 @@
+/* Shared form elements */
+
+form {
+    max-width: 760px;
+}
+
+label {
+    display: inline-block;
+    margin: 6px 0 7px;
+    color: #475569;
+    font-weight: 700;
+}
+
+input,
+select,
+textarea {
+    width: min(100%, 620px);
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    color: var(--text);
+    background: #fff;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}

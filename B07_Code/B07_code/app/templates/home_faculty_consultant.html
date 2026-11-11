@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-faculty-consultant">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Faculty Consultant Dashboard</p>
+        <h2>Faculty Consultant Home</h2>
+        <p>Manage groups, mentors, students, messages, interview records, imports, and support activity from one workspace.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">People search</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('consultant.search_student') }}">
+            <span class="dashboard-icon">🔎</span>
+            <span>
+                <strong>Search Student Info</strong>
+                <small>Find student profiles, groups, and mentor assignment details.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.search_mentor') }}">
+            <span class="dashboard-icon">👥</span>
+            <span>
+                <strong>Search Mentor Info</strong>
+                <small>Review mentor information and assigned support groups.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Data import</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('consultant.import_students') }}">
+            <span class="dashboard-icon">📥</span>
+            <span>
+                <strong>Import Students</strong>
+                <small>Upload Appendix B student list, preview file content, then confirm import.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.import_coordinators') }}">
+            <span class="dashboard-icon">🧑‍💼</span>
+            <span>
+                <strong>Import Coordinators</strong>
+                <small>Upload Appendix C coordinator list, preview file content, then confirm import.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Group management</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('consultant.faculty_groups') }}">
+            <span class="dashboard-icon">🏷</span>
+            <span>
+                <strong>View Groups</strong>
+                <small>Browse groups and related mentor-student assignments.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.change_group_mentor_page') }}">
+            <span class="dashboard-icon">🔁</span>
+            <span>
+                <strong>Change Group Mentor</strong>
+                <small>Reassign a mentor for an existing group.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.add_student_to_group_page') }}">
+            <span class="dashboard-icon">➕</span>
+            <span>
+                <strong>Add Student to Group</strong>
+                <small>Add a student into an appropriate mentor group.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('consultant.remove_student_from_group_page') }}">
+            <span class="dashboard-icon">➖</span>
+            <span>
+                <strong>Remove Student from Group</strong>
+                <small>Remove a student from an existing group assignment.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Messages</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('message.message_home') }}">
+            <span class="dashboard-icon">💬</span>
+            <span>
+                <strong>Messages</strong>
+                <small>View received and sent messages.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.send_message_page') }}">
+            <span class="dashboard-icon">✉</span>
+            <span>
+                <strong>Send Message</strong>
+                <small>Send a message to another system user.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Records and account</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('report.record_search') }}">
+            <span class="dashboard-icon">📄</span>
+            <span>
+                <strong>Search Records</strong>
+                <small>Search interview and support records.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.export_records_page') }}">
+            <span class="dashboard-icon">⬇</span>
+            <span>
+                <strong>Export Records</strong>
+                <small>Export interview records for reporting.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.word_files') }}">
+            <span class="dashboard-icon">🗂</span>
+            <span>
+                <strong>Generated Word Files</strong>
+                <small>Download previously generated export files.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.log_list') }}">
+            <span class="dashboard-icon">🕘</span>
+            <span>
+                <strong>Log Activities</strong>
+                <small>Review system and student activity logs.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your account password.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the system.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

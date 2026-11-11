@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/messages.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="message-page message-detail-page">
+    {% set linked_student = namespace(student_id='', student_name='') %}
+    {% if message.content and ('Student:' in message.content) and (('[Forwarded Case]' in message.content) or ('[Escalated Case]' in message.content)) %}
+        {% set student_part = message.content.split('Student:', 1)[1].strip() %}
+        {% set student_line = student_part.split('
+', 1)[0].strip() %}
+        {% set student_tokens = student_line.split() %}
+        {% if student_tokens %}
+            {% set linked_student.student_id = student_tokens[0] %}
+            {% set linked_student.student_name = student_tokens[1:] | join(' ') %}
+        {% endif %}
+    {% endif %}
+
+    <section class="message-hero">
+        <p class="message-eyebrow">Message Detail</p>
+        <h2>Message Detail</h2>
+        <p>Review message information, mark it as read, and continue the conversation.</p>
+    </section>
+
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Message Information</h3>
+                <p>Basic details of the selected message.</p>
+            </div>
+
+            <form class="message-inline-form" method="post" action="{{ url_for('message.mark_read', message_id=message.id) }}">
+                <button type="submit">Mark as Read</button>
+            </form>
+        </div>
+
+        <div class="message-detail-grid">
+            <div class="message-info-card">
+                <strong>From</strong>
+                <span>{{ message.sender.name }}</span>
+            </div>
+
+            <div class="message-info-card">
+                <strong>To</strong>
+                <span>
+                    {% for receiver in message.receiver_users %}
+                        {{ receiver.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+
+            <div class="message-info-card">
+                <strong>Status</strong>
+                <span class="status-pill status-{{ message.status|lower|replace(' ', '-')|replace('_', '-') }}">{{ message.status }}</span>
+            </div>
+
+            <div class="message-info-card">
+                <strong>Sent Time</strong>
+                <span>{{ message.sent_datetime }}</span>
+            </div>
+
+            {% if message.attachment %}
+            <div class="message-info-card full">
+                <strong>Attachment</strong>
+                <span>{{ message.attachment }}</span>
+            </div>
+            {% endif %}
+
+            {% if linked_student.student_id %}
+            <div class="message-info-card full">
+                <strong>Attached Student</strong>
+                <span>
+                    <a class="message-btn secondary" href="{{ url_for('report.student_records', student_id=linked_student.student_id) }}">
+                        View records for {{ linked_student.student_id }}{% if linked_student.student_name %} {{ linked_student.student_name }}{% endif %}
+                    </a>
+                </span>
+            </div>
+            {% endif %}
+
+            <div class="message-info-card full">
+                <strong>Content</strong>
+                <div class="message-content-box">{{ message.content }}</div>
+            </div>
+        </div>
+    </section>
+
+    {% if message.parent_message %}
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Reply To</h3>
+                <p>Original message content.</p>
+            </div>
+        </div>
+        <div class="message-content-box">{{ message.parent_message.content }}</div>
+    </section>
+    {% endif %}
+
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Reply</h3>
+                <p>Write a reply to continue the conversation.</p>
+            </div>
+        </div>
+
+        <form class="message-form" method="post" action="{{ url_for('message.reply', message_id=message.id) }}">
+            <label for="reply_content">Reply Content</label>
+            <textarea id="reply_content" name="reply_content" rows="4" required></textarea>
+
+            <div class="message-form-actions">
+                <button type="submit">Send Reply</button>
+                <a class="message-btn secondary" href="{{ url_for('message.message_home') }}">Back to Messages</a>
+            </div>
+        </form>
+    </section>
+
+    {% if message.replies %}
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Replies</h3>
+                <p>Conversation history for this message.</p>
+            </div>
+        </div>
+
+        <ul class="message-reply-list">
+            {% for reply in message.replies %}
+            <li class="message-reply-item">
+                <strong>{{ reply.sender.name }}</strong>
+                <p>{{ reply.content }}</p>
+                <small>{{ reply.sent_datetime }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

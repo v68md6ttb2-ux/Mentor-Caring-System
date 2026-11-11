@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/appointments.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="appointments-page appointments-mentor-page">
+    <section class="appointment-hero">
+        <p class="appointment-eyebrow">Appointment Center</p>
+        <h2>Mentor Appointments</h2>
+        <p>Review student appointment requests, confirm meeting venues, and manage available interview time slots.</p>
+    </section>
+
+    <div class="appointment-toolbar">
+        <div>
+            <strong>Appointment overview</strong>
+            <p>Manage appointment status, selected times, venues, and cancellations.</p>
+        </div>
+        <a class="appointment-primary-action" href="{{ url_for('appointment.create_appointment_page') }}">＋ Create Appointment</a>
+    </div>
+
+    <section class="appointment-section">
+        {% if appointments %}
+        <div class="appointment-table-wrap">
+            <table class="appointment-table">
+                <tr>
+                    <th>Student</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                    <th>Selected Time</th>
+                    <th>Venue</th>
+                    <th>Available Slots</th>
+                    <th>Confirm</th>
+                    <th>Cancel</th>
+                </tr>
+
+                {% for appointment in appointments %}
+                <tr>
+                    <td>
+                        <div class="appointment-person">
+                            <span class="appointment-avatar">
+                                {% if appointment.student %}{{ appointment.student.name[:1] }}{% else %}?{% endif %}
+                            </span>
+                            <strong>
+                                {% if appointment.student %}
+                                    {{ appointment.student.name }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </td>
+
+                    <td class="appointment-content">{{ appointment.content }}</td>
+
+                    <td>
+                        <span class="appointment-status status-{{ appointment.appointment_status|lower|replace(' ', '-')|replace('_', '-') }}">
+                            {{ appointment.appointment_status }}
+                        </span>
+                    </td>
+
+                    <td class="appointment-time">
+                        {% if appointment.appointment_date and appointment.appointment_time %}
+                            {{ appointment.appointment_date }}<br>
+                            <strong>{{ appointment.appointment_time }}</strong>
+                        {% else %}
+                            <span class="appointment-muted">Not selected</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="appointment-venue">
+                        {% if appointment.venue %}
+                            {{ appointment.venue }}
+                        {% else %}
+                            <span class="appointment-muted">Not confirmed</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <ul class="slot-list">
+                            {% for slot in appointment.available_slot_list %}
+                            <li class="slot-item {% if slot.is_selected %}is-selected{% endif %}">
+                                {{ slot.start_time }} - {{ slot.end_time }}
+                                {% if slot.is_selected %}
+                                    · selected
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+
+                    <td>
+                        <form class="inline-action-form" method="post" action="{{ url_for('appointment.confirm', appointment_id=appointment.id) }}">
+                            <input type="text" name="venue" placeholder="Venue" required>
+                            <button type="submit">Confirm</button>
+                        </form>
+                    </td>
+
+                    <td>
+                        <form class="cancel-form" method="post" action="{{ url_for('appointment.cancel', appointment_id=appointment.id) }}">
+                            <button type="submit">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="appointment-empty">No appointments.</div>
+        {% endif %}
+    </section>
+
+    <div>
+        <a class="appointment-back-link" href="{{ url_for('mentor.mentor_home') }}">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

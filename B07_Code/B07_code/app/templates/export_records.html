@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="record-export-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Records Export</p>
+        <h2>Export Interview Records</h2>
+        <p>Generate Word files for selected academic years, departments, mentors, or students.</p>
+    </section>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Export Filters</h3>
+                <p>Select filters below. Leave fields unselected to export all matching records.</p>
+            </div>
+        </div>
+
+        <form class="records-form" method="post">
+            <div class="records-form-group">
+                <label>Academic Year List</label>
+                <select name="academic_year_list" multiple size="5">
+                    {% for y in years %}
+                    <option value="{{ y }}">{{ y }}</option>
+                    {% endfor %}
+                </select>
+                <small class="records-help">Hold Ctrl to select more than one academic year. Leave all unselected to export all years.</small>
+            </div>
+
+            <div class="records-form-grid">
+                <div class="records-form-group">
+                    <label>Department Name</label>
+                    <select name="department_name">
+                        <option value="">All</option>
+                        {% for d in departments %}
+                        <option value="{{ d }}">{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="records-help">For checklist 3.10, choose DCS after selecting academic year 2025-2026.</small>
+                </div>
+
+                <div class="records-form-group">
+                    <label>Mentor Name</label>
+                    <select name="mentor_name">
+                        <option value="">All</option>
+                        {% for m in mentors %}
+                        <option value="{{ m }}">{{ m }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="records-form-group">
+                    <label>Student Name</label>
+                    <select name="student_name">
+                        <option value="">All</option>
+                        {% for s in students %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="records-form-actions">
+                <button type="submit">Generate Word File</button>
+                <a class="records-secondary-action" href="{{ url_for('report.word_files') }}">Generated Word Files</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

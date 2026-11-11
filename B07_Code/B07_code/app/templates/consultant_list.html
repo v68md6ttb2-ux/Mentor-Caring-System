@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="consultant-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Admin Management</p>
+        <h2>Faculty Consultant Management</h2>
+        <p>Manage consultant accounts, faculty assignments, and consultant access information.</p>
+    </section>
+
+    <div class="org-toolbar">
+        <div>
+            <h3>Consultant list</h3>
+            <p>Review current faculty consultants and their faculty assignments.</p>
+        </div>
+
+        <div class="org-actions">
+            <a class="org-action" href="{{ url_for('admin.add_consultant') }}">＋ Add Faculty Consultant</a>
+            <a class="org-secondary-action" href="{{ url_for('admin.change_consultant') }}">Change Consultant Faculty</a>
+        </div>
+    </div>
+
+    {% if consultants %}
+    <section class="org-card">
+        <div class="org-table-wrap">
+            <table class="org-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Account</th>
+                    <th>Faculty</th>
+                    <th>Action</th>
+                </tr>
+                {% for c in consultants %}
+                <tr>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>{{ c.account }}</td>
+                    <td>
+                        {% if c.faculty %}
+                            <span class="org-status">{{ c.faculty.name }}</span>
+                        {% else %}
+                            <span class="org-status is-muted">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin.delete_consultant') }}" class="org-inline-form">
+                            <input type="hidden" name="consultant_id" value="{{ c.id }}">
+                            <button class="org-danger-action" type="submit" onclick="return confirm('Delete this consultant?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+    {% else %}
+    <p class="org-empty">No faculty consultants found.</p>
+    {% endif %}
+
+    <div>
+        <a class="org-secondary-action" href="{{ url_for('admin.admin_home') }}">← Back to Admin Home</a>
+    </div>
+</div>
+{% endblock %}

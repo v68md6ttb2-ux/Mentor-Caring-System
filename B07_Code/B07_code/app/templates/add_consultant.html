@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Consultant Account</p>
+        <h2>Add Faculty Consultant</h2>
+        <p>Create a new faculty consultant account and optionally assign it to a faculty.</p>
+    </section>
+
+    <section class="org-card">
+        <form class="org-form" method="POST">
+            <div class="org-form-grid">
+                <div class="org-form-group">
+                    <label>Account</label>
+                    <input type="text" name="account" required placeholder="Login account">
+                </div>
+
+                <div class="org-form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required minlength="6" placeholder="At least 6 characters">
+                </div>
+
+                <div class="org-form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" required placeholder="Consultant name">
+                </div>
+
+                <div class="org-form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+
+                <div class="org-form-group is-full">
+                    <label>Faculty</label>
+                    <select name="faculty_id">
+                        <option value="">-- No Faculty --</option>
+                        {% for f in faculties %}
+                        <option value="{{ f.id }}">{{ f.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit">Add Consultant</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.admin_consultants') }}">← Back to Consultant List</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

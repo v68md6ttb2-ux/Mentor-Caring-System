@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/messages.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="message-page message-home-page">
+    <section class="message-hero">
+        <p class="message-eyebrow">Message Center</p>
+        <h2>Messages</h2>
+        <p>View received messages, track sent messages, and keep communication records organized.</p>
+    </section>
+
+    <div class="message-toolbar">
+        <a class="message-btn" href="{{ url_for('message.send_message_page') }}">+ Send New Message</a>
+    </div>
+
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Received Messages</h3>
+                <p>Messages sent to you by other users.</p>
+            </div>
+        </div>
+
+        {% if received_messages %}
+        <div class="message-table-wrap">
+            <table class="message-table">
+                <tr>
+                    <th>From</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                    <th>Sent Time</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for msg, entry in received_messages %}
+                <tr>
+                    <td>{{ msg.sender.name }}</td>
+                    <td class="message-preview">{{ msg.content[:50] }}{% if msg.content|length > 50 %}...{% endif %}</td>
+                    <td>
+                        <span class="status-pill status-{{ entry.status|lower|replace(' ', '-')|replace('_', '-') }}">
+                            {{ entry.status }}
+                        </span>
+                    </td>
+                    <td>{{ msg.sent_datetime }}</td>
+                    <td>
+                        <a class="message-action-link" href="{{ url_for('message.message_detail', message_id=msg.id) }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="message-empty">No received messages.</div>
+        {% endif %}
+    </section>
+
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>Sent Messages</h3>
+                <p>Messages you have sent to other users.</p>
+            </div>
+        </div>
+
+        {% if sent_messages %}
+        <div class="message-table-wrap">
+            <table class="message-table">
+                <tr>
+                    <th>To</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                    <th>Sent Time</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for msg in sent_messages %}
+                <tr>
+                    <td>
+                        {% for receiver in msg.receiver_users %}
+                            {{ receiver.name }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="message-preview">{{ msg.content[:50] }}{% if msg.content|length > 50 %}...{% endif %}</td>
+                    <td>
+                        <span class="status-pill status-{{ msg.status|lower|replace(' ', '-')|replace('_', '-') }}">
+                            {{ msg.status }}
+                        </span>
+                    </td>
+                    <td>{{ msg.sent_datetime }}</td>
+                    <td>
+                        <a class="message-action-link" href="{{ url_for('message.message_detail', message_id=msg.id) }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="message-empty">No sent messages.</div>
+        {% endif %}
+    </section>
+
+    <div class="message-toolbar">
+        {% if current_user.role == "mentor" %}
+            <a class="message-btn secondary" href="{{ url_for('mentor.mentor_home') }}">Back</a>
+        {% elif current_user.role == "student" %}
+            <a class="message-btn secondary" href="{{ url_for('student.student_home') }}">Back</a>
+        {% elif current_user.role == "coordinator" %}
+            <a class="message-btn secondary" href="{{ url_for('coordinator.coordinator_home') }}">Back</a>
+        {% elif current_user.role == "faculty_consultant" %}
+            <a class="message-btn secondary" href="{{ url_for('consultant.faculty_home') }}">Back</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

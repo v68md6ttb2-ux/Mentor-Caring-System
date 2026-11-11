@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-student">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Student Dashboard</p>
+        <h2>Student Home</h2>
+        <p>Check your mentor information, manage messages, and view interview appointments in one dashboard.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">Quick actions</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('student.student_mentor_info') }}">
+            <span class="dashboard-icon">👤</span>
+            <span>
+                <strong>Mentor Information</strong>
+                <small>Check your assigned mentor and related information.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.message_home') }}">
+            <span class="dashboard-icon">💬</span>
+            <span>
+                <strong>Messages</strong>
+                <small>View received messages and internal communication.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.send_message_page') }}">
+            <span class="dashboard-icon">✉</span>
+            <span>
+                <strong>Send Message</strong>
+                <small>Contact your mentor or other related users.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('appointment.student_appointments') }}">
+            <span class="dashboard-icon">📅</span>
+            <span>
+                <strong>Interview Appointments</strong>
+                <small>View and manage your interview appointment schedule.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your login password.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the system.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

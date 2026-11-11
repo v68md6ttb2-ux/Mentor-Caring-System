@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="record-search-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Records Search</p>
+        <h2>Search Interview Records</h2>
+        <p>Search by keyword, academic year, mentor, or student to quickly locate relevant interview records.</p>
+    </section>
+
+    <div class="records-toolbar">
+        <div class="records-toolbar-text">
+            <strong>Records tools</strong>
+            <span>Export matched records or review previously generated files.</span>
+        </div>
+
+        <div class="records-actions">
+            <a class="records-primary-action" href="{{ url_for('report.export_records_page') }}">Export Records</a>
+            <a class="records-secondary-action" href="{{ url_for('report.word_files') }}">Generated Word Files</a>
+        </div>
+    </div>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Search Filters</h3>
+                <p>Enter one or more conditions below.</p>
+            </div>
+        </div>
+
+        <form class="records-form" method="post">
+            <div class="records-form-grid">
+                <div class="records-form-group">
+                    <label>Keyword</label>
+                    <input type="text" name="keyword" value="{{ keyword }}" placeholder="student ID/name, mentor, problem">
+                </div>
+
+                <div class="records-form-group">
+                    <label>Academic Year</label>
+                    <input type="text" name="academic_year" value="{{ academic_year }}" placeholder="2025-2026">
+                </div>
+
+                <div class="records-form-group">
+                    <label>Mentor Name</label>
+                    <input type="text" name="mentor_name" value="{{ mentor_name }}">
+                </div>
+
+                <div class="records-form-group">
+                    <label>Student Name</label>
+                    <input type="text" name="student_name" value="{{ student_name }}">
+                </div>
+            </div>
+
+            <div class="records-form-actions">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="records-panel">
+        <div class="records-section-header">
+            <div>
+                <h3>Search Results</h3>
+                <p>Matching records will appear below.</p>
+            </div>
+        </div>
+
+        {% if records %}
+        <div class="records-table-wrap">
+            <table class="records-table">
+                <tr>
+                    <th>Record ID</th>
+                    <th>Student</th>
+                    <th>Mentor</th>
+                    <th>Date</th>
+                    <th>Problem</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.record_id }}</td>
+                    <td>{{ record.student.student_id }} - {{ record.student.name }}</td>
+                    <td>{{ record.mentor.name }}</td>
+                    <td>{{ record.interview_date }}</td>
+                    <td class="records-text-preview">{{ record.problem_statement }}</td>
+                    <td>
+                        <a class="records-view-link" href="{{ url_for('report.record_detail', record_id=record.record_id) }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="records-empty">No records to display yet. Enter filters and click Search.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

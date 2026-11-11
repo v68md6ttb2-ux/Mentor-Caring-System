@@ -1,0 +1,11 @@
+/* Mentor Caring System global stylesheet entry point.
+   Global rules are split by responsibility. Page-specific CSS files are
+   still loaded from each template through the extra_css block. */
+
+@import url("css/variables.css");
+@import url("css/base.css");
+@import url("css/navbar.css");
+@import url("css/layout.css");
+@import url("css/forms.css");
+@import url("css/buttons.css");
+@import url("css/tables.css");

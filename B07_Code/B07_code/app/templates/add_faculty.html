@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Organization Setup</p>
+        <h2>Add Faculty</h2>
+        <p>Create a new faculty record for the organization structure.</p>
+    </section>
+
+    <section class="org-card">
+        <form class="org-form" method="post">
+            <div class="org-form-grid">
+                <div class="org-form-group is-full">
+                    <label>Faculty Name</label>
+                    <input type="text" name="name" required placeholder="Enter faculty name">
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit">Add Faculty</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.organization') }}">← Back to Organization Structure</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

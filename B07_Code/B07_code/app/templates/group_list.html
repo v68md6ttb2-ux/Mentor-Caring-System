@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="group-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Faculty Consultant</p>
+        <h2>MCP Group List</h2>
+        <p>Review MCP groups, mentors, academic year information, and assigned students.</p>
+    </section>
+
+    <div class="org-toolbar">
+        <div>
+            <h3>Groups overview</h3>
+            <p>Manage group mentors and student group membership.</p>
+        </div>
+
+        <div class="org-actions">
+            <a class="org-action" href="{{ url_for('consultant.change_group_mentor_page') }}">Change Group Mentor</a>
+            <a class="org-action" href="{{ url_for('consultant.add_student_to_group_page') }}">＋ Add Student</a>
+            <a class="org-secondary-action" href="{{ url_for('consultant.remove_student_from_group_page') }}">Remove Student</a>
+        </div>
+    </div>
+
+    {% if groups %}
+    <section class="org-card">
+        <div class="org-table-wrap">
+            <table class="org-table">
+                <tr>
+                    <th>Group ID</th>
+                    <th>Academic Year</th>
+                    <th>Mentor</th>
+                    <th>Mentor Email</th>
+                    <th>Office</th>
+                    <th>Major</th>
+                    <th>Department</th>
+                    <th>Faculty</th>
+                    <th>Students</th>
+                </tr>
+
+                {% for group in groups %}
+                <tr>
+                    <td><strong>{{ group.group_id }}</strong></td>
+                    <td>{{ group.academic_year }}</td>
+                    <td>{{ group.mentor.name if group.mentor else "N/A" }}</td>
+                    <td>{{ group.mentor.email if group.mentor else "N/A" }}</td>
+                    <td>{{ group.mentor.office if group.mentor else "N/A" }}</td>
+                    <td>{{ group.major.name if group.major else "N/A" }}</td>
+                    <td>
+                        {% if group.major and group.major.department %}
+                            {{ group.major.department.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if group.major and group.major.department and group.major.department.faculty %}
+                            {{ group.major.department.faculty.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td class="org-long-cell">
+                        {% if group.students %}
+                            <ul class="group-student-list">
+                                {% for student in group.students %}
+                                    <li>{{ student.student_id }} - {{ student.name }} - {{ student.status }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="org-status is-muted">No students</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+    {% else %}
+    <p class="org-empty">No MCP groups found.</p>
+    {% endif %}
+
+    <div>
+        <a class="org-secondary-action" href="{{ url_for('consultant.faculty_home') }}">← Back to Faculty Consultant Home</a>
+    </div>
+</div>
+{% endblock %}

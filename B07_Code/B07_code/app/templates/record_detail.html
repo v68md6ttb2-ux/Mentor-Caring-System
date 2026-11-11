@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="record-detail-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Interview Record</p>
+        <h2>Record Detail</h2>
+        <p>Review the full interview record information and follow-up content.</p>
+    </section>
+
+    <div class="records-meta-grid">
+        <div class="records-meta-card">
+            <small>Record ID</small>
+            <strong>{{ record.record_id }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Student</small>
+            <strong>{{ record.student.student_id }} - {{ record.student.name }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Mentor</small>
+            <strong>{{ record.mentor.name }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Date</small>
+            <strong>{{ record.interview_date }}</strong>
+        </div>
+
+        <div class="records-meta-card">
+            <small>Time</small>
+            <strong>{{ record.interview_time.strftime('%H:%M') }}</strong>
+        </div>
+    </div>
+
+    <section class="records-panel">
+        <div class="record-content-grid">
+            <div class="record-content-card">
+                <h3>Problem Statement</h3>
+                <div class="record-content-box">{{ record.problem_statement }}</div>
+            </div>
+
+            <div class="record-content-card">
+                <h3>Interview Summary</h3>
+                <div class="record-content-box">{{ record.interview_summary }}</div>
+            </div>
+
+            <div class="record-content-card">
+                <h3>Follow-up Action</h3>
+                <div class="record-content-box">{{ record.followup_action }}</div>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <a class="records-back-link" href="{{ url_for('report.student_records', student_id=record.student.student_id) }}">← Back to Records</a>
+    </div>
+</div>
+{% endblock %}

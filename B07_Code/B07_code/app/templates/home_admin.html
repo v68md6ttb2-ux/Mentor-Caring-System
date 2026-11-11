@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-admin">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Admin Dashboard</p>
+        <h2>Admin Home</h2>
+        <p>Manage the organization structure, faculty consultants, and account settings from one place.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">Quick actions</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('admin.organization') }}">
+            <span class="dashboard-icon">🏛</span>
+            <span>
+                <strong>Organization Structure</strong>
+                <small>View and manage the system organization hierarchy.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('admin.import_organization') }}">
+            <span class="dashboard-icon">📥</span>
+            <span>
+                <strong>Import Organization</strong>
+                <small>Preview Appendix A Excel data, then import faculties, departments, and programmes.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('admin.admin_consultants') }}">
+            <span class="dashboard-icon">👥</span>
+            <span>
+                <strong>Faculty Consultants</strong>
+                <small>Manage faculty consultant information and responsibilities.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your account password for better security.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the current account.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

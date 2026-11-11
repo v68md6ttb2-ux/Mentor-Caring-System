@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-mentor">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Mentor Dashboard</p>
+        <h2>Mentor Home</h2>
+        <p>Handle student support, messages, interview appointments, case forwarding, and records efficiently.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">Student support</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('consultant.search_student') }}">
+            <span class="dashboard-icon">🔎</span>
+            <span>
+                <strong>Search Student Info</strong>
+                <small>Find student profiles and support information.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('mentor.forward_case') }}">
+            <span class="dashboard-icon">📤</span>
+            <span>
+                <strong>Forward Case</strong>
+                <small>Forward a case to the coordinator for further handling.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Messages</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('message.message_home') }}">
+            <span class="dashboard-icon">💬</span>
+            <span>
+                <strong>Messages</strong>
+                <small>View internal communication and received messages.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.send_message_page') }}">
+            <span class="dashboard-icon">✉</span>
+            <span>
+                <strong>Send Message</strong>
+                <small>Send a new message to another system user.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Appointments</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('appointment.mentor_appointments') }}">
+            <span class="dashboard-icon">📅</span>
+            <span>
+                <strong>Interview Appointments</strong>
+                <small>Check upcoming interview appointments.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('appointment.create_appointment_page') }}">
+            <span class="dashboard-icon">➕</span>
+            <span>
+                <strong>Create Appointment Slots</strong>
+                <small>Open new available interview time slots.</small>
+            </span>
+        </a>
+    </div>
+
+    <h3 class="dashboard-section-title">Records and account</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('report.record_search') }}">
+            <span class="dashboard-icon">📄</span>
+            <span>
+                <strong>Search Records</strong>
+                <small>Search consultation and interview records.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.export_records_page') }}">
+            <span class="dashboard-icon">⬇</span>
+            <span>
+                <strong>Export Records</strong>
+                <small>Export records for review or reporting.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.word_files') }}">
+            <span class="dashboard-icon">🗂</span>
+            <span>
+                <strong>Generated Word Files</strong>
+                <small>Download previously generated export files.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('report.log_list') }}">
+            <span class="dashboard-icon">🕘</span>
+            <span>
+                <strong>Log Activities</strong>
+                <small>View recent system activity logs.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your account password.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the system.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

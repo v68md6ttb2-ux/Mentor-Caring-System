@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="records-page wordfile-page">
+    <section class="records-hero">
+        <p class="records-eyebrow">Export Records</p>
+        <h2>Generated Word Files</h2>
+        <p>Review exported interview record files, check export conditions, and download generated Word documents.</p>
+    </section>
+
+    <div class="records-toolbar">
+        <div class="records-toolbar-text">
+            <strong>Export file history</strong>
+            <span>Files are listed from newest to oldest.</span>
+        </div>
+
+        <div class="records-actions">
+            <a class="records-secondary-action" href="{{ url_for('report.export_records_page') }}">← Back to Export Records</a>
+        </div>
+    </div>
+
+    <section class="records-panel">
+        {% if files %}
+        <div class="records-table-wrap">
+            <table class="records-table wordfile-table">
+                <tr>
+                    <th>File ID</th>
+                    <th>Path</th>
+                    <th>Conditions</th>
+                    <th>Created At</th>
+                    <th>Download</th>
+                </tr>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.file_id }}</td>
+                    <td class="records-file-path">{{ file.file_path }}</td>
+                    <td class="records-text-preview">
+                        {% if file.academicYearList %}
+                            {{ file.academicYearList | join(", ") }}
+                        {% else %}
+                            All
+                        {% endif %}
+                    </td>
+                    <td>{{ file.created_at }}</td>
+                    <td>
+                        <a class="records-view-link" href="{{ url_for('report.download_word_file', file_id=file.id) }}">Download</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="records-empty">No generated Word files yet.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

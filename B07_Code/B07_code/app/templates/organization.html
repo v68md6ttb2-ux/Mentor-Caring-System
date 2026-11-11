@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="organization-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Admin Management</p>
+        <h2>Organization Structure</h2>
+        <p>Manage the hierarchy of faculties, departments, and majors in a clearer organization view.</p>
+    </section>
+
+    <div class="org-toolbar">
+        <div>
+            <h3>Structure overview</h3>
+            <p>Review active faculties, departments, and majors.</p>
+        </div>
+
+        <div class="org-actions">
+            <a class="org-action" href="{{ url_for('admin.import_organization') }}">📥 Import Organization</a>
+            <a class="org-action" href="{{ url_for('admin.add_faculty_page') }}">＋ Add Faculty</a>
+            <a class="org-action" href="{{ url_for('admin.add_department_page') }}">＋ Add Department</a>
+            <a class="org-action" href="{{ url_for('admin.add_major_page') }}">＋ Add Major</a>
+        </div>
+    </div>
+
+    {% if faculties %}
+    <div class="org-tree">
+        {% for faculty in faculties %}
+        <section class="faculty-card">
+            <div class="faculty-header">
+                <h3>{{ faculty.name }}</h3>
+                <p>Faculty</p>
+            </div>
+
+            {% if faculty.departments %}
+            <div class="department-list">
+                {% for department in faculty.departments %}
+                    {% if department.active %}
+                    <article class="department-card">
+                        <h4>{{ department.name }}</h4>
+
+                        {% if department.majors %}
+                        <ul class="major-list">
+                            {% for major in department.majors %}
+                                {% if major.active %}
+                                <li><span class="major-pill">{{ major.name }}</span></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="org-empty">No majors under this department.</p>
+                        {% endif %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="department-list">
+                <p class="org-empty">No departments under this faculty.</p>
+            </div>
+            {% endif %}
+        </section>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="org-empty">No organization data found.</p>
+    {% endif %}
+
+    <div>
+        <a class="org-secondary-action" href="{{ url_for('admin.admin_home') }}">← Back to Admin Home</a>
+    </div>
+</div>
+{% endblock %}

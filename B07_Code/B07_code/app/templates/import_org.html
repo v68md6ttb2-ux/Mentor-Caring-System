@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Admin Management</p>
+        <h2>Import Organization Structure</h2>
+        <p>Preview Appendix A first, then confirm the import into the faculty-department-major hierarchy.</p>
+    </section>
+
+    <section class="org-card">
+        <h3>Step 1 · Upload Appendix A Excel file</h3>
+        <p class="org-form-help">
+            Required format: <strong>Faculty Name</strong> | <strong>Department Name</strong> | <strong>Major Name</strong>.
+            Please preview the file content before importing, as required by the checklist.
+        </p>
+
+        <form class="org-form" method="POST" enctype="multipart/form-data">
+            <div class="org-form-grid">
+                <div class="org-form-group is-full">
+                    <label for="excel_file">Organization Excel file</label>
+                    <input id="excel_file" type="file" name="excel_file" accept=".xlsx,.xls" required>
+                    <p class="org-form-help">Example file: <code>test_data/test_org.xlsx</code></p>
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit" name="action" value="preview">Preview File Content</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.organization') }}">← Back to Organization</a>
+            </div>
+        </form>
+    </section>
+
+    {% if preview_rows %}
+    <section class="org-card">
+        <h3>Step 2 · Preview result</h3>
+        <p class="org-form-help">
+            {{ preview_rows|length }} row(s) were read from the uploaded file. Check the content below before confirming the import.
+        </p>
+
+        <div class="org-table-wrap">
+            <table class="org-table">
+                <tr>
+                    <th>#</th>
+                    <th>Faculty</th>
+                    <th>Department</th>
+                    <th>Major / Programme</th>
+                </tr>
+                {% for row in preview_rows %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row.faculty }}</td>
+                    <td>{{ row.department }}</td>
+                    <td>{{ row.major }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <form class="org-form" method="POST">
+            <input type="hidden" name="action" value="confirm">
+            {% if file_path %}
+            <input type="hidden" name="file_path" value="{{ file_path }}">
+            {% endif %}
+
+            <div class="org-form-actions">
+                <button type="submit">Confirm Import</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.import_organization') }}">Choose Another File</a>
+            </div>
+        </form>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

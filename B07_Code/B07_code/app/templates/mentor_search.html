@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/students.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="mentor-search-page">
+    <section class="student-hero">
+        <p class="student-eyebrow">Mentor Information</p>
+        <h2>Search Mentor Information</h2>
+        <p>Search by mentor name, email, or group ID, then review group information and student members.</p>
+    </section>
+
+    <section class="student-card">
+        <h3>Find a mentor or group</h3>
+
+        <form class="mentor-search-form" method="post">
+            <div class="student-search-row">
+                <div>
+                    <label>Mentor Name / Email / Group ID</label>
+                    <input
+                        type="text"
+                        name="keyword"
+                        value="{{ keyword }}"
+                        placeholder="e.g. John Wang / johnwang@bnbu.edu.cn / 2025-2026-Y2-G01"
+                        required
+                    >
+                </div>
+
+                <button type="submit" name="action" value="search">Search</button>
+            </div>
+        </form>
+    </section>
+
+    {% if groups %}
+    <section class="student-card mentor-search-result">
+        <div>
+            <h3>Mentor Search Result</h3>
+            <p class="student-muted">Select a group below to view its student members.</p>
+        </div>
+
+        <div class="student-table-wrap">
+            <table class="student-table">
+                <tr>
+                    <th>Mentor Name</th>
+                    <th>Mentor Email</th>
+                    <th>Office</th>
+                    <th>Group ID</th>
+                    <th>Academic Year</th>
+                    <th>Major</th>
+                    <th>Department</th>
+                    <th>Faculty</th>
+                </tr>
+
+                {% for group in groups %}
+                <tr>
+                    <td>{{ group.mentor.name if group.mentor else "N/A" }}</td>
+                    <td>{{ group.mentor.email if group.mentor else "N/A" }}</td>
+                    <td>{{ group.mentor.office if group.mentor else "N/A" }}</td>
+                    <td>{{ group.group_id }}</td>
+                    <td>{{ group.academic_year }}</td>
+                    <td>{{ group.major.name if group.major else "N/A" }}</td>
+                    <td>
+                        {% if group.major and group.major.department %}
+                            {{ group.major.department.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if group.major and group.major.department and group.major.department.faculty %}
+                            {{ group.major.department.faculty.name }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <form method="post">
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+
+            <div class="student-select-row">
+                <div>
+                    <label>Select Group ID</label>
+                    <select name="selected_group_id">
+                        <option value="">-- Select Group ID --</option>
+
+                        {% for group in groups %}
+                            <option value="{{ group.id }}"
+                                {% if selected_group_id and selected_group_id|int == group.id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ group.group_id }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" name="action" value="show_members">Show members</button>
+            </div>
+        </form>
+    </section>
+    {% endif %}
+
+    {% if selected_group %}
+    <section class="student-card">
+        <h3>Group Member List</h3>
+
+        <div class="student-summary-grid">
+            <div class="student-info-item">
+                <small>Mentor Name</small>
+                <strong>{{ selected_group.mentor.name if selected_group.mentor else "N/A" }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Mentor Email</small>
+                <strong>{{ selected_group.mentor.email if selected_group.mentor else "N/A" }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Group ID</small>
+                <strong>{{ selected_group.group_id }}</strong>
+            </div>
+        </div>
+
+        <br>
+
+        {% if selected_group.students %}
+        <div class="student-table-wrap">
+            <table class="student-table">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for student in selected_group.students %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('consultant.student_detail', student_id=student.student_id) }}">
+                            {{ student.student_id }}
+                        </a>
+                    </td>
+                    <td>{{ student.name }}</td>
+                    <td><span class="student-status">{{ student.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="student-note">No students in this group.</div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <div class="student-actions">
+        {% if current_user.role == "coordinator" %}
+            <a class="student-secondary-action" href="{{ url_for('coordinator.coordinator_home') }}">← Back to Coordinator Home</a>
+        {% elif current_user.role == "faculty_consultant" %}
+            <a class="student-secondary-action" href="{{ url_for('consultant.faculty_home') }}">← Back to Faculty Consultant Home</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

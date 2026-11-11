@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/students.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="student-profile-page">
+    <section class="student-hero">
+        <p class="student-eyebrow">Student Profile</p>
+        <h2>Student Detail</h2>
+        <p class="student-muted">{{ info.student.name }}</p>
+        <p>Student ID: {{ info.student.student_id }} · Status: {{ info.student.status }}</p>
+    </section>
+
+    <section class="student-card">
+        <div class="student-summary-grid">
+            <div class="student-info-item">
+                <small>Student ID</small>
+                <strong>{{ info.student.student_id }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Name</small>
+                <strong>{{ info.student.name }}</strong>
+            </div>
+            <div class="student-info-item">
+                <small>Status</small>
+                <span class="student-status">{{ info.student.status }}</span>
+            </div>
+            <div class="student-info-item">
+                <small>Group</small>
+                <strong>{{ info.group.group_id if info.group else "Not assigned" }}</strong>
+            </div>
+        </div>
+    </section>
+
+    <div class="student-section-grid">
+        <section class="student-profile-card">
+            <h3>Organization Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Faculty</span>
+                    <span>{{ info.faculty.name if info.faculty else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Department</span>
+                    <span>{{ info.department.name if info.department else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Major</span>
+                    <span>{{ info.major.name if info.major else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-profile-card">
+            <h3>MCP Group Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Group ID</span>
+                    <span>{{ info.group.group_id if info.group else "Not assigned" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Academic Year</span>
+                    <span>{{ info.group.academic_year if info.group else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-profile-card">
+            <h3>Mentor Information</h3>
+            <div class="student-profile-list">
+                <div class="student-profile-row">
+                    <span>Mentor Name</span>
+                    <span>{{ info.mentor.name if info.mentor else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Mentor Email</span>
+                    <span>{{ info.mentor.email if info.mentor else "N/A" }}</span>
+                </div>
+                <div class="student-profile-row">
+                    <span>Office</span>
+                    <span>{{ info.mentor.office if info.mentor else "N/A" }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-profile-card">
+            <h3>Record Access</h3>
+
+            {% if current_user.role == "mentor" %}
+                <p class="student-muted">You can view and edit this student's interview records.</p>
+                <div class="student-actions">
+                    <a class="student-primary-action" href="{{ url_for('report.student_records', student_id=info.student.student_id) }}">
+                        View / Edit Interview Records
+                    </a>
+                </div>
+            {% elif current_user.role == "coordinator" %}
+                <div class="student-note">
+                    <strong>Read-only mode:</strong> Coordinator can view student information but cannot edit interview records.
+                </div>
+                <br>
+                <div class="student-actions">
+                    <a class="student-primary-action" href="{{ url_for('report.student_records', student_id=info.student.student_id) }}">
+                        View Interview Records
+                    </a>
+                </div>
+            {% elif current_user.role == "faculty_consultant" %}
+                <div class="student-note">
+                    <strong>Read-only mode:</strong> Faculty Consultant can view student information and records.
+                </div>
+                <br>
+                <div class="student-actions">
+                    <a class="student-primary-action" href="{{ url_for('report.student_records', student_id=info.student.student_id) }}">
+                        View Interview Records
+                    </a>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+
+    <div class="student-actions">
+        <a class="student-secondary-action" href="{{ url_for('consultant.search_student') }}">← Back to Search</a>
+    </div>
+</div>
+{% endblock %}

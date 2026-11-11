@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/appointments.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="appointments-page appointments-student-page">
+    <section class="appointment-hero">
+        <p class="appointment-eyebrow">Appointment Center</p>
+        <h2>Student Appointments</h2>
+        <p>Choose a suitable interview time slot, review appointment details, and keep track of meeting venues.</p>
+    </section>
+
+    <div class="appointment-toolbar">
+        <div>
+            <strong>Your appointment list</strong>
+            <p>Check mentor appointments, selected times, status, and venue information.</p>
+        </div>
+    </div>
+
+    <section class="appointment-section">
+        {% if appointments %}
+        <div class="appointment-table-wrap">
+            <table class="appointment-table">
+                <tr>
+                    <th>Mentor</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                    <th>Selected Time</th>
+                    <th>Venue</th>
+                    <th>Choose Slot</th>
+                    <th>Cancel</th>
+                </tr>
+
+                {% for appointment in appointments %}
+                <tr>
+                    <td>
+                        <div class="appointment-person">
+                            <span class="appointment-avatar">{{ appointment.mentor.name[:1] }}</span>
+                            <strong>{{ appointment.mentor.name }}</strong>
+                        </div>
+                    </td>
+
+                    <td class="appointment-content">{{ appointment.content }}</td>
+
+                    <td>
+                        <span class="appointment-status status-{{ appointment.appointment_status|lower|replace(' ', '-')|replace('_', '-') }}">
+                            {{ appointment.appointment_status }}
+                        </span>
+                    </td>
+
+                    <td class="appointment-time">
+                        {% if appointment.appointment_date and appointment.appointment_time %}
+                            {{ appointment.appointment_date }}<br>
+                            <strong>{{ appointment.appointment_time }}</strong>
+                        {% else %}
+                            <span class="appointment-muted">Not selected</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="appointment-venue">
+                        {% if appointment.venue %}
+                            {{ appointment.venue }}
+                        {% else %}
+                            <span class="appointment-muted">Not confirmed</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if appointment.appointment_status == "Requested" %}
+                        <form class="choose-slot-form" method="post" action="{{ url_for('appointment.choose_slot', appointment_id=appointment.id) }}">
+                            <div class="choose-slot-list">
+                                {% for slot in appointment.available_slot_list %}
+                                    {% if not slot.is_selected %}
+                                    <label class="choose-slot-option">
+                                        <input type="radio" name="slot_id" value="{{ slot.id }}" required>
+                                        <span>{{ slot.start_time }} - {{ slot.end_time }}</span>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <button type="submit">Choose</button>
+                        </form>
+                        {% else %}
+                            <span class="appointment-muted">Not available</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <form class="cancel-form" method="post" action="{{ url_for('appointment.cancel', appointment_id=appointment.id) }}">
+                            <button type="submit">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="appointment-empty">No appointments.</div>
+        {% endif %}
+    </section>
+
+    <div>
+        <a class="appointment-back-link" href="{{ url_for('student.student_home') }}">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

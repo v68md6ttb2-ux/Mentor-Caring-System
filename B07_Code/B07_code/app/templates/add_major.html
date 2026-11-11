@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Organization Setup</p>
+        <h2>Add Major</h2>
+        <p>Add a major to an existing department.</p>
+    </section>
+
+    <section class="org-card">
+        <form class="org-form" method="post">
+            <div class="org-form-grid">
+                <div class="org-form-group">
+                    <label>Department</label>
+                    <select name="department_id" required>
+                        {% for department in departments %}
+                            <option value="{{ department.id }}">
+                                {{ department.faculty.name }} - {{ department.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="org-form-group">
+                    <label>Major Name</label>
+                    <input type="text" name="name" required placeholder="Enter major name">
+                </div>
+            </div>
+
+            <div class="org-form-actions">
+                <button type="submit">Add Major</button>
+                <a class="org-secondary-action" href="{{ url_for('admin.organization') }}">← Back to Organization Structure</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

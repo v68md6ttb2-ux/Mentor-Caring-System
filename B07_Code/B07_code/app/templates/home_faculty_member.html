@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page dashboard-page-faculty-member">
+    <section class="dashboard-hero">
+        <p class="dashboard-eyebrow">Faculty Member Dashboard</p>
+        <h2>Faculty Member Home</h2>
+        <p>Access student log information, communicate through messages, and manage your account settings.</p>
+    </section>
+
+    <h3 class="dashboard-section-title">Quick actions</h3>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-action" href="{{ url_for('report.log_list') }}">
+            <span class="dashboard-icon">📋</span>
+            <span>
+                <strong>View Log Activities</strong>
+                <small>Search a student's activity log information by student ID.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.message_home') }}">
+            <span class="dashboard-icon">💬</span>
+            <span>
+                <strong>Messages</strong>
+                <small>View internal communication and received messages.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('message.send_message_page') }}">
+            <span class="dashboard-icon">✉</span>
+            <span>
+                <strong>Send Message</strong>
+                <small>Send a message to another system user.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action" href="{{ url_for('auth.change_password') }}">
+            <span class="dashboard-icon">🔐</span>
+            <span>
+                <strong>Change Password</strong>
+                <small>Update your account password.</small>
+            </span>
+        </a>
+
+        <a class="dashboard-action is-danger" href="{{ url_for('auth.logout') }}">
+            <span class="dashboard-icon">↪</span>
+            <span>
+                <strong>Logout</strong>
+                <small>Safely sign out from the current account.</small>
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,330 @@
+/* Student / user information module */
+
+.students-page,
+.student-profile-page,
+.mentor-info-page,
+.case-forward-page,
+.mentor-search-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.student-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    border-radius: 22px;
+    color: #fff;
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.28), transparent 18rem),
+        linear-gradient(135deg, #0f172a 0%, #2563eb 55%, #06b6d4 100%);
+    box-shadow: 0 18px 40px rgba(37, 99, 235, 0.18);
+}
+
+.student-hero h2 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+}
+
+.student-hero p {
+    max-width: 760px;
+    margin: 0;
+    color: #e0f2fe;
+}
+
+.student-eyebrow {
+    margin: 0 0 8px;
+    color: #bfdbfe;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.student-card {
+    padding: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+}
+
+.student-card h3 {
+    margin: 0 0 16px;
+    color: #172033;
+    font-size: 1.25rem;
+}
+
+.student-muted {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+.student-search-form,
+.case-form,
+.mentor-search-form {
+    max-width: none;
+}
+
+.student-search-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.student-search-row input,
+.mentor-search-form input,
+.case-form input,
+.case-form textarea {
+    width: 100%;
+    max-width: none;
+}
+
+.student-form-group {
+    margin-bottom: 18px;
+}
+
+.student-form-group label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.student-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.student-primary-action,
+.student-secondary-action,
+.student-danger-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.student-primary-action {
+    color: #fff;
+    background: var(--primary);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+}
+
+.student-primary-action:hover {
+    color: #fff;
+    background: var(--primary-dark);
+    text-decoration: none;
+}
+
+.student-secondary-action {
+    color: #334155;
+    background: #fff;
+    border: 1px solid var(--border);
+}
+
+.student-secondary-action:hover {
+    color: var(--primary);
+    background: var(--primary-soft);
+    text-decoration: none;
+}
+
+.student-danger-action {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.student-danger-action:hover {
+    color: #7f1d1d;
+    background: #fecaca;
+    text-decoration: none;
+}
+
+.student-summary-grid,
+.student-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+.student-info-item {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent 60%),
+        #fff;
+}
+
+.student-info-item small {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.student-info-item strong {
+    color: #172033;
+}
+
+.student-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    color: #166534;
+    background: #dcfce7;
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.student-section-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.student-profile-card {
+    padding: 22px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+}
+
+.student-profile-card h3 {
+    margin: 0 0 16px;
+    color: #172033;
+}
+
+.student-profile-list {
+    display: grid;
+    gap: 12px;
+}
+
+.student-profile-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.student-profile-row:last-child {
+    border-bottom: 0;
+}
+
+.student-profile-row span:first-child {
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.student-profile-row span:last-child {
+    text-align: right;
+    color: #172033;
+    font-weight: 700;
+}
+
+.student-note {
+    padding: 16px;
+    border-radius: 16px;
+    color: #1e3a8a;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+}
+
+.mentor-search-result {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.student-table-wrap {
+    overflow-x: auto;
+}
+
+.student-table {
+    margin: 0;
+}
+
+.student-table td,
+.student-table th {
+    white-space: nowrap;
+}
+
+.student-table td.student-long-cell {
+    white-space: normal;
+    min-width: 220px;
+}
+
+.student-select-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.student-select-row select {
+    width: 100%;
+    max-width: none;
+}
+
+.case-form textarea {
+    min-height: 150px;
+}
+
+.case-help {
+    padding: 16px;
+    border-radius: 16px;
+    color: #334155;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+}
+
+@media (max-width: 920px) {
+    .student-section-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .student-hero,
+    .student-card,
+    .student-profile-card {
+        padding: 22px;
+    }
+
+    .student-search-row,
+    .student-select-row {
+        grid-template-columns: 1fr;
+    }
+
+    .student-primary-action,
+    .student-secondary-action,
+    .student-danger-action,
+    .student-search-row button,
+    .student-select-row button {
+        width: 100%;
+    }
+
+    .student-profile-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .student-profile-row span:last-child {
+        text-align: left;
+    }
+}

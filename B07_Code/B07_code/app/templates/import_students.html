@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/organization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="org-form-page">
+    <section class="org-hero">
+        <p class="org-eyebrow">Faculty Consultant</p>
+        <h2>Import Students</h2>
+        <p>Upload Appendix B student list, preview the file content first, then confirm the import.</p>
+    </section>
+
+    <section class="org-panel">
+        <div class="org-toolbar">
+            <div>
+                <h3>Step 1 · Upload Appendix B Excel file</h3>
+                <p>Expected columns: Student ID, Student Name, Major, Status, Group ID, Mentor, Office, Mentor Email.</p>
+            </div>
+            <a class="org-btn secondary" href="{{ url_for('consultant.faculty_groups') }}">Back to Groups</a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="org-form-grid">
+            <div class="org-form-group is-full">
+                <label for="excel_file">Student List Excel File</label>
+                <input id="excel_file" type="file" name="excel_file" accept=".xlsx,.xls" required>
+                <p class="org-form-help">Use the checklist Appendix B format. Preview is required before importing.</p>
+            </div>
+
+            <div class="org-form-actions">
+                <button class="org-btn" type="submit" name="action" value="preview">Preview File Content</button>
+            </div>
+        </form>
+    </section>
+
+    {% if preview_rows %}
+    <section class="org-panel">
+        <div class="org-toolbar">
+            <div>
+                <h3>Step 2 · Preview Result</h3>
+                <p>{{ preview_rows|length }} row(s) detected. Confirm only after checking the content below.</p>
+            </div>
+        </div>
+
+        <div class="org-table-wrap">
+            <table class="org-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Major</th>
+                        <th>Status</th>
+                        <th>Group ID</th>
+                        <th>Mentor</th>
+                        <th>Office</th>
+                        <th>Mentor Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in preview_rows %}
+                    <tr>
+                        <td>{{ row.student_id }}</td>
+                        <td>{{ row.student_name }}</td>
+                        <td>{{ row.major }}</td>
+                        <td>{{ row.status }}</td>
+                        <td>{{ row.group_id }}</td>
+                        <td>{{ row.mentor_name }}</td>
+                        <td>{{ row.office }}</td>
+                        <td>{{ row.mentor_email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <form method="POST" class="org-form-actions">
+            <input type="hidden" name="action" value="confirm">
+            {% if file_path %}
+            <input type="hidden" name="file_path" value="{{ file_path }}">
+            {% endif %}
+            <button class="org-btn" type="submit">Confirm Import</button>
+            <a class="org-btn secondary" href="{{ url_for('consultant.import_students') }}">Choose Another File</a>
+        </form>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

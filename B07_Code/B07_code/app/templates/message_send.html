@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/messages.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="message-page message-send-page">
+    <section class="message-hero">
+        <p class="message-eyebrow">Compose Message</p>
+        <h2>Send Message</h2>
+        <p>Select one or more receivers, write your content, and send a system message.</p>
+    </section>
+
+    <section class="message-section">
+        <div class="message-section-header">
+            <div>
+                <h3>New Message</h3>
+                <p>Choose receivers and fill in the message details.</p>
+            </div>
+        </div>
+
+        <form class="message-form" method="post">
+            <label>Receivers</label>
+
+            <div class="receiver-grid">
+                {% for receiver in receivers %}
+                <label class="receiver-card">
+                    <input type="checkbox" name="receiver_ids" value="{{ receiver.id }}">
+                    <span>
+                        <strong>{{ receiver.name }}</strong>
+                        <small>{{ receiver.role }}</small>
+                        <small>{{ receiver.email }}</small>
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="6" required></textarea>
+
+            <label for="attachment">Attachment</label>
+            <input id="attachment" type="text" name="attachment" placeholder="Optional attachment path or name">
+
+            <div class="message-form-actions">
+                <button type="submit">Send</button>
+                <a class="message-btn secondary" href="{{ url_for('message.message_home') }}">Back to Messages</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
